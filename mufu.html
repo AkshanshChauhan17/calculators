@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .head {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .calc {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 0px;
+    }
+    
+    .calc-heading {
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    .calc-sub-heading {
+        font-size: 14px;
+        color: rgb(81, 81, 81);
+        margin-top: 10px;
+    }
+    
+    .calc-ar {
+        display: grid;
+        padding: 40px;
+        outline: 1px solid rgb(215, 215, 215);
+        border-radius: 10px;
+        background-color: #fffdf4;
+    }
+    
+    .calc-ar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .calc-title {
+        font-weight: 500;
+        font-size: 18px;
+    }
+    
+    .switch-buttons {
+        display: flex;
+        gap: 2px;
+        border: 1px solid rgb(207, 207, 207);
+        border-radius: 50px;
+        padding: 2px 2px;
+        width: fit-content;
+    }
+    
+    .s-button-active {
+        background-color: #F5C519;
+        color: rgb(0, 0, 0);
+        padding: 4px 20px;
+        border-radius: 50px;
+        padding-bottom: 6px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    
+    .s-button {
+        background-color: rgba(57, 83, 57, 0);
+        padding: 4px 20px;
+        padding-bottom: 6px;
+        border-radius: 50px;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+        cursor: pointer;
+    }
+    
+    .calc-ar-controls {
+        display: flex;
+        gap: 40px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .controller {
+        flex: 1;
+    }
+    
+    .controller-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-size: 14px;
+        align-items: center;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px;
+        border-bottom: 1px solid rgb(210, 210, 210);
+        outline: 0px;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    .controller-input {
+        position: relative;
+        font-weight: 600;
+    }
+    
+    .controller-input .tip {
+        position: absolute;
+        top: 10px;
+    }
+    
+    .input-range {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    input[type=range] {
+        -webkit-appearance: none;
+        height: 8px;
+        background: transparent;
+    }
+    
+    input[type=range]::-webkit-slider-runnable-track {
+        height: 4px;
+        border-radius: 4px;
+    }
+    
+    input[type=range]::-moz-range-track {
+        height: 4px;
+        border-radius: 4px;
+    }
+    
+    input[type=range]::-ms-track {
+        height: 4px;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -8px;
+        cursor: pointer;
+        box-shadow: 0 0 0px 2px #F5C519;
+    }
+    
+    input[type=range]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+        background: #a2a2a2;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -8px;
+    }
+    
+    input[type=range]::-ms-thumb {
+        height: 20px;
+        width: 20px;
+        background: #007bff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -8px;
+    }
+    
+    input[type=range] {
+        height: 4px;
+        background: linear-gradient(to right, #F5C519 0%, #ddd 0%);
+        border-radius: 4px;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 16px;
+        width: 16px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -6px;
+        cursor: pointer;
+    }
+    
+    .calc-ar-calculations {
+        margin-top: 40px;
+        padding: 20px;
+        outline: 1px solid rgb(220, 220, 220);
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+    
+    .calc-ar-calculations-left {
+        flex: 1;
+    }
+    
+    .calc-ar-calculation-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .calculations-box {
+        outline: 1px solid rgb(211, 211, 211);
+        padding: 20px;
+        border-radius: 10px;
+        display: grid;
+        gap: 40px;
+    }
+    
+    .calculation-row {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .calculation-row-bottom {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .info {
+        font-size: 14px;
+        flex: 0.8;
+    }
+    
+    .invest-now {
+        width: 200px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 0px;
+        outline: 0px;
+        background-color: #004080;
+        color: white;
+        flex: 0.2;
+        height: fit-content;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    canvas {
+        width: fit-content;
+    }
+    
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-sizing: border-box;
+    }
+    
+    .head {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 0 15px;
+    }
+    
+    .calc {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 15px;
+    }
+    
+    .calc-heading {
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    .calc-sub-heading {
+        font-size: 14px;
+        color: rgb(81, 81, 81);
+        margin-top: 10px;
+    }
+    
+    .calc-ar {
+        display: grid;
+        padding: 40px;
+        outline: 1px solid rgb(215, 215, 215);
+        border-radius: 10px;
+        background-color: #fffdf4;
+    }
+    
+    .calc-ar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .calc-title {
+        font-weight: 500;
+        font-size: 18px;
+    }
+    
+    .calc-ar-controls {
+        display: flex;
+        gap: 40px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .controller {
+        flex: 1;
+        min-width: 220px;
+    }
+    
+    .controller-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-size: 14px;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px;
+        border-bottom: 1px solid rgb(210, 210, 210);
+        outline: 0px;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    .controller-input {
+        position: relative;
+        font-weight: 600;
+    }
+    
+    .controller-input .tip {
+        position: absolute;
+        top: 3px;
+    }
+    
+    .input-range {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    input[type=range] {
+        -webkit-appearance: none;
+        height: 4px;
+        background: linear-gradient(to right, #F5C519 0%, #ddd 0%);
+        border-radius: 4px;
+        outline: none;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 16px;
+        width: 16px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -6px;
+        cursor: pointer;
+        box-shadow: 0 0 0px 2px #F5C519;
+    }
+    
+    .calc-ar-calculations {
+        margin-top: 40px;
+        padding: 20px;
+        outline: 1px solid rgb(220, 220, 220);
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+    
+    .calc-ar-calculations-left,
+    .calc-ar-calculation-right {
+        flex: 1;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px !important;
+        border-bottom: 1px solid rgb(210, 210, 210) !important;
+        outline: 0px !important;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    .calc-ar-calculation-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: fit-content;
+        gap: 20px;
+    }
+    
+    .calculations-box {
+        outline: 1px solid rgb(211, 211, 211);
+        padding: 20px;
+        border-radius: 10px;
+        display: grid;
+        gap: 40px;
+    }
+    
+    .calculation-row {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .calculation-row-bottom {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .info {
+        font-size: 14px;
+        flex: 0.8;
+    }
+    
+    .invest-now {
+        width: 200px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 0px;
+        outline: 0px;
+        background-color: #004080;
+        color: white;
+        flex: 0.2;
+        height: fit-content;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+    
+    @media (max-width: 700px) {
+        .calc-ar {
+            padding: 20px;
+        }
+        .calc-ar-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .calc-ar-controls {
+            flex-direction: column;
+            gap: 20px;
+        }
+        .controller {
+            flex: auto;
+            width: 100%;
+        }
+        .calc-ar-calculations {
+            flex-direction: column;
+            padding: 15px;
+        }
+        .calculation-row {
+            flex-direction: column;
+            gap: 8px;
+        }
+        .invest-now {
+            width: 100%;
+        }
+        canvas {
+            width: 100% !important;
+        }
+        .calc {
+            padding: 40px 0px;
+        }
+        .calc-ar {
+            padding: 20px 10px;
+        }
+        .calculation-row-bottom {
+            display: grid;
+        }
+    }
+</style>
+
+<body>
+    <div class="calc">
+        <div class="head">
+            <div class="calc-heading">Mutual Fund Calculator</div>
+            <div class="calc-sub-heading">
+                Mutual funds are a great way to achieve your financial goals. ET Money’s mutual fund calculator helps you estimate the potential returns on your investments, whether you're making a lump sum or SIP investment. With this tool, you can quickly determine
+                the capital gains and maturity amount of your mutual fund investments.
+            </div>
+        </div>
+
+        <div class="calc-ar">
+            <div class="calc-ar-head">
+                <div class="calc-title">Calculate the future value of your mutual fund investment</div>
+                <div class="switch-buttons">
+                    <div class="s-button-active" id="msip">Monthly SIP</div>
+                    <div class="s-button" id="lump">Lumpsum</div>
+                </div>
+            </div>
+
+            <div class="calc-ar-controls">
+                <div class="controller">
+                    <div class="controller-top">
+                        <div class="controller-lable">I want to invest monthly</div>
+                        <div class="controller-input">
+                            <span class="tip">₹</span>
+                            <input class="input-input" type="text" id="invest_input" value="100" />
+                        </div>
+                    </div>
+                    <input class="input-range" type="range" id="invest_range" min="100" max="100000000" value="100" />
+                </div>
+
+                <div class="controller">
+                    <div class="controller-top">
+                        <div class="controller-lable">Investment Period</div>
+                        <div class="controller-input">
+                            <input class="input-input" type="text" id="period_input" value="1 years" />
+                        </div>
+                    </div>
+                    <input class="input-range" type="range" id="period_range" min="1" max="50" value="1" />
+                </div>
+
+                <div class="controller">
+                    <div class="controller-top">
+                        <div class="controller-lable">Expected Return (%)</div>
+                        <div class="controller-input">
+                            <input class="input-input" type="text" id="returns_input" value="1%" />
+                        </div>
+                    </div>
+                    <input class="input-range" type="range" id="returns_range" min="1" max="50" value="1" />
+                </div>
+            </div>
+
+            <div class="calc-ar-calculations">
+                <div class="calc-ar-calculations-left">
+                    What you got:
+                    <br /><br />
+                    <canvas id="barChart" height="200px"></canvas>
+                </div>
+
+                <div class="calc-ar-calculation-right">
+                    <div class="calculations-box">
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Total Invested</span>
+                            <b class="calculation-row-value" id="invested_calc"></b>
+                        </div>
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Gains</span>
+                            <b class="calculation-row-value" id="gains_calc"></b>
+                        </div>
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Future Value</span>
+                            <b class="calculation-row-value" id="future_calc"></b>
+                        </div>
+                    </div>
+
+                    <!-- <div class="calculation-row-bottom">
+                        <div class="info">
+                            Start investing in top-performing funds now to maximize the benefits of compounding on your investments
+                        </div>
+                        <button class="invest-now">Invest now</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var op = 0;
+        document.getElementById("msip").addEventListener("click", () => {
+            op = 0;
+            updateSIPChart();
+            document.getElementById("msip").className = "s-button-active";
+            document.getElementById("lump").className = "s-button";
+        });
+        document.getElementById("lump").addEventListener("click", () => {
+            op = 1;
+            updateSIPChart();
+            document.getElementById("msip").className = "s-button";
+            document.getElementById("lump").className = "s-button-active";
+        });
+
+        function formatRupee(value) {
+            if (value >= 10000000) return (value / 10000000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " Cr";
+            if (value >= 100000) return (value / 100000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " L";
+            if (value >= 1000) return (value / 1000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " K";
+            return value.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function calculateSIPYearly(investPerMonth, annualReturn, totalYears) {
+            const P = parseFloat(investPerMonth);
+            var r = parseFloat(annualReturn) / 100 / 12;
+
+            if (op == 0) {
+                r = parseFloat(annualReturn) / 100 / 12;
+            }
+
+            if (op == 1) {
+                r = parseFloat(annualReturn) / 100;
+            }
+
+            const labels = [];
+            const investedArr = [];
+            const gainsArr = [];
+
+            for (let y = 1; y <= totalYears; y++) {
+                var n = y * 12;
+                if (op == 1) n = y;
+
+                const invested = P * n;
+                const futureValue = P * (((Math.pow(1 + r, n) - 1) * (1 + r)) / r);
+                const gains = futureValue - invested;
+
+                labels.push(`${y}Y`);
+                investedArr.push(Math.round(invested));
+                gainsArr.push(Math.round(gains));
+            }
+
+            return {
+                labels,
+                investedArr,
+                gainsArr
+            };
+        }
+
+        function drawYearlySIPChart(labels, investedArr, gainsArr) {
+            const ctx = document.getElementById("barChart").getContext("2d");
+            if (window.sipChart) window.sipChart.destroy();
+
+            window.sipChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Invested",
+                        data: investedArr,
+                        backgroundColor: "#ccc",
+                        stack: "stack1",
+                    }, {
+                        label: "Gains",
+                        data: gainsArr,
+                        backgroundColor: "#004080",
+                        stack: "stack1",
+                    }, ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ": ₹" + context.raw.toLocaleString();
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return "₹" + formatRupee(value);
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        }
+
+        function updateSIPChart() {
+            const invest = parseFloat(document.getElementById("invest_range").value);
+            const period = parseInt(document.getElementById("period_range").value);
+            const returns = parseFloat(document.getElementById("returns_range").value);
+
+            const {
+                labels,
+                investedArr,
+                gainsArr
+            } = calculateSIPYearly(invest, returns, period);
+            drawYearlySIPChart(labels, investedArr, gainsArr);
+
+            document.getElementById("invested_calc").innerText = "₹" + formatRupee(investedArr[investedArr.length - 1]);
+            document.getElementById("gains_calc").innerText = "₹" + formatRupee(gainsArr[gainsArr.length - 1]);
+            document.getElementById("future_calc").innerText = "₹" + formatRupee(investedArr[investedArr.length - 1] + gainsArr[gainsArr.length - 1]);
+        }
+
+        ["invest_range", "period_range", "returns_range"].forEach(id => {
+            document.getElementById(id).addEventListener("input", updateSIPChart);
+        });
+
+        updateSIPChart();
+    </script>
+
+    <!-- Slider + Input formatting -->
+    <script>
+        function formatValue(id, val) {
+            val = parseFloat(val);
+            if (id === "invest_range") {
+                if (val >= 10000000) return (val / 10000000).toFixed(2) + " Cr";
+                if (val >= 100000) return (val / 100000).toFixed(2) + " L";
+                if (val >= 1000) return (val / 1000).toFixed(2) + " K";
+                return val.toString();
+            } else if (id === "period_range") {
+                return val + " years";
+            } else if (id === "returns_range") {
+                return val + " %";
+            }
+            return val.toString();
+        }
+
+        function parseInputValue(id, str) {
+            str = str.toLowerCase().replace(/[^0-9.klc]/g, "");
+            let num = parseFloat(str);
+            if (isNaN(num)) return null;
+
+            if (id === "invest_range") {
+                if (str.includes("cr")) return num * 10000000;
+                if (str.includes("l")) return num * 100000;
+                if (str.includes("k")) return num * 1000;
+            }
+            return num;
+        }
+
+        function updateSliderBackground(slider) {
+            const val = (slider.value - slider.min) / (slider.max - slider.min);
+            slider.style.background = `linear-gradient(to right, #F5C519 ${val * 100}%, #ddd ${val * 100}%)`;
+        }
+
+        document.querySelectorAll(".input-range").forEach(slider => {
+            const input = document.getElementById(slider.id.replace("_range", "_input"));
+            input.value = formatValue(slider.id, slider.value);
+            updateSliderBackground(slider);
+
+            slider.addEventListener("input", () => {
+                input.value = formatValue(slider.id, slider.value);
+                updateSliderBackground(slider);
+            });
+
+            input.addEventListener("focus", () => {
+                input.value = slider.value;
+            });
+
+            input.addEventListener("input", () => {
+                const parsed = parseFloat(input.value);
+                if (!isNaN(parsed)) {
+                    const clamped = Math.min(Math.max(parsed, slider.min), slider.max);
+                    slider.value = clamped;
+                    updateSliderBackground(slider);
+                }
+            });
+
+            input.addEventListener("blur", () => {
+                input.value = formatValue(slider.id, slider.value);
+            });
+        });
+    </script>
+</body>
+
+</html>

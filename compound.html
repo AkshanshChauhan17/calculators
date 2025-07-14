@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .head {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .calc {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 0px;
+    }
+    
+    .calc-heading {
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    .calc-sub-heading {
+        font-size: 14px;
+        color: rgb(81, 81, 81);
+        margin-top: 10px;
+    }
+    
+    .calc-ar {
+        display: grid;
+        padding: 40px;
+        outline: 1px solid rgb(215, 215, 215);
+        border-radius: 10px;
+        background-color: #fffdf4;
+    }
+    
+    .calc-ar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .calc-title {
+        font-weight: 500;
+        font-size: 18px;
+    }
+    
+    .switch-buttons {
+        display: flex;
+        gap: 2px;
+        border: 1px solid rgb(207, 207, 207);
+        border-radius: 50px;
+        padding: 2px 2px;
+        width: fit-content;
+    }
+    
+    .s-button-active {
+        background-color: #F5C519;
+        color: rgb(0, 0, 0);
+        padding: 4px 20px;
+        border-radius: 50px;
+        padding-bottom: 6px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    
+    .s-button {
+        background-color: rgba(57, 83, 57, 0);
+        padding: 4px 20px;
+        padding-bottom: 6px;
+        border-radius: 50px;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+        cursor: pointer;
+    }
+    
+    .calc-ar-controls {
+        display: flex;
+        gap: 40px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .controller {
+        flex: 1;
+    }
+    
+    .controller-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-size: 14px;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px;
+        border-bottom: 1px solid rgb(210, 210, 210);
+        outline: 0px;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    .controller-input {
+        position: relative;
+        font-weight: 600;
+    }
+    
+    .controller-input .tip {
+        position: absolute;
+        top: 3px;
+    }
+    
+    .input-range {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    input[type=range] {
+        -webkit-appearance: none;
+        height: 8px;
+        background: transparent;
+    }
+    
+    input[type=range]::-webkit-slider-runnable-track {
+        height: 4px;
+        border-radius: 4px;
+    }
+    
+    input[type=range]::-moz-range-track {
+        height: 4px;
+        border-radius: 4px;
+    }
+    
+    input[type=range]::-ms-track {
+        height: 4px;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -8px;
+        cursor: pointer;
+        box-shadow: 0 0 0px 2px #F5C519;
+    }
+    
+    input[type=range]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+        background: #a2a2a2;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -8px;
+    }
+    
+    input[type=range]::-ms-thumb {
+        height: 20px;
+        width: 20px;
+        background: #007bff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -8px;
+    }
+    
+    input[type=range] {
+        height: 4px;
+        background: linear-gradient(to right, #F5C519 0%, #ddd 0%);
+        border-radius: 4px;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 16px;
+        width: 16px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -6px;
+        cursor: pointer;
+    }
+    
+    .calc-ar-calculations {
+        margin-top: 40px;
+        padding: 20px;
+        outline: 1px solid rgb(220, 220, 220);
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+    
+    .calc-ar-calculations-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .calc-ar-calculation-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .calculations-box {
+        outline: 0px solid rgb(211, 211, 211);
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .calculation-row {
+        min-width: 160px !important;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .calculation-row-value {
+        font-size: 25px;
+    }
+    
+    .calculation-row-bottom {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .info {
+        font-size: 14px;
+        flex: 0.8;
+    }
+    
+    .invest-now {
+        width: 200px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 0px;
+        outline: 0px;
+        background-color: #004080;
+        color: white;
+        flex: 0.2;
+        height: fit-content;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    canvas {
+        width: fit-content;
+    }
+    
+    hr {
+        margin-top: 10px;
+        height: 0px;
+        width: 100%;
+    }
+    
+    .years {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .years input {
+        font-size: 20px;
+        font-size: 20px;
+        width: fit-content;
+        width: 100px;
+        margin-right: 10px;
+    }
+    
+    .controller-input {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .active,
+    .unactive {
+        height: fit-content;
+        outline: 1px solid rgb(187, 187, 187);
+        border-radius: 2px;
+        padding: 2px 10px;
+        border: 0px;
+    }
+    
+    .active {
+        background-color: #F5C519;
+    }
+    
+    .controller-top-two {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-sizing: border-box;
+    }
+    
+    .head {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 0 15px;
+    }
+    
+    .calc {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 15px;
+    }
+    
+    .calc-heading {
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    .calc-sub-heading {
+        font-size: 14px;
+        color: rgb(81, 81, 81);
+        margin-top: 10px;
+    }
+    
+    .calc-ar {
+        display: grid;
+        padding: 40px;
+        outline: 1px solid rgb(215, 215, 215);
+        border-radius: 10px;
+        background-color: #fffdf4;
+    }
+    
+    .calc-ar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .calc-title {
+        font-weight: 500;
+        font-size: 18px;
+    }
+    
+    .calc-ar-controls {
+        display: flex;
+        gap: 40px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .controller {
+        flex: 1;
+        min-width: 220px;
+    }
+    
+    .controller-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-size: 14px;
+        align-items: center;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px;
+        border-bottom: 1px solid rgb(210, 210, 210);
+        outline: 0px;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    .controller-input {
+        position: relative;
+        font-weight: 600;
+    }
+    
+    .controller-input .tip {
+        position: absolute;
+        top: 10px;
+    }
+    
+    .input-range {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    input[type=range] {
+        -webkit-appearance: none;
+        height: 4px;
+        background: linear-gradient(to right, #F5C519 0%, #ddd 0%);
+        border-radius: 4px;
+        outline: none;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 16px;
+        width: 16px;
+        background: #ffffff;
+        border-radius: 50%;
+        margin-top: -6px;
+        cursor: pointer;
+        box-shadow: 0 0 0px 2px #F5C519;
+    }
+    
+    .calc-ar-calculations {
+        margin-top: 40px;
+        padding: 20px;
+        outline: 1px solid rgb(220, 220, 220);
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+    
+    .calc-ar-calculations-left,
+    .calc-ar-calculation-right {
+        flex: 1;
+    }
+    
+    .calc-ar-calculation-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: fit-content;
+        gap: 20px;
+    }
+    
+    .calculations-box {
+        outline: 1px solid rgb(211, 211, 211);
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        gap: 40px;
+    }
+    
+    .calculation-row {
+        display: flex;
+        justify-content: space-between;
+        min-width: 200px;
+    }
+    
+    .calculation-row-bottom {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .info {
+        font-size: 14px;
+        flex: 0.8;
+    }
+    
+    .invest-now {
+        width: 200px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 0px;
+        outline: 0px;
+        background-color: #004080;
+        color: white;
+        flex: 0.2;
+        height: fit-content;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+    
+    .input-input {
+        background-color: transparent;
+        border: 0px !important;
+        border-bottom: 1px solid rgb(210, 210, 210) !important;
+        outline: 0px !important;
+        padding-left: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        max-width: 100px;
+    }
+    
+    button {
+        height: fit-content !important;
+        padding: 5px 20px !important;
+        border: 0px !important;
+        outline: 0px !important;
+        color: black !important;
+    }
+    
+    button:hover {
+        background-color: rgb(231, 231, 231) !important;
+    }
+    
+    button:focus-visible {
+        background-color: #F5C519 !important;
+    }
+    
+    .active {
+        background-color: #F5C519 !important;
+    }
+    
+    @media (max-width: 700px) {
+        .calc-ar {
+            padding: 20px;
+        }
+        .calc-ar-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .calc-ar-controls {
+            flex-direction: column;
+            gap: 20px;
+        }
+        .controller {
+            flex: auto;
+            width: 100%;
+        }
+        .calc-ar-calculations {
+            flex-direction: column;
+            padding: 15px;
+        }
+        .calculation-row {
+            flex-direction: column;
+            gap: 8px;
+        }
+        .invest-now {
+            width: 100%;
+        }
+        canvas {
+            width: 100% !important;
+        }
+        .calc {
+            padding: 40px 0px;
+        }
+        .calc-ar {
+            padding: 20px 10px;
+        }
+        .calculation-row-bottom {
+            display: grid;
+        }
+    }
+</style>
+
+<body>
+    <div class="calc">
+        <div class="head">
+            <div class="calc-heading">Compound Interest Calculator</div>
+        </div>
+        <div class="calc-ar">
+            <div class="calc-ar-head">
+                <div class="calc-title">Check how much you can earn with Power of Compounding</div>
+                <div class="switch-buttons">
+                    <div class="s-button-active" id="msip">Monthly SIP</div>
+                    <div class="s-button" id="lump">Lumpsum</div>
+                </div>
+            </div>
+            <div class="calc-ar-controls">
+                <div class="controller">
+                    <div class="controller-top">
+                        <div class="controller-lable">I want to invest</div>
+                        <div class="controller-input">
+                            <span class="tip">₹</span>
+                            <input class="input-input" type="text" id="invest_input" value="100" />
+                        </div>
+                    </div>
+                    <input class="input-range" type="range" id="invest_range" min="100" max="100000000" value="100" />
+                </div>
+                <div class="controller">
+                    <div class="controller-top">
+                        <div class="controller-lable">Expected rate of interest (p.a.)</div>
+                        <div class="controller-input">
+                            <input class="input-input" type="text" id="rate_input" value="12 %" />
+                        </div>
+                    </div>
+                    <input class="input-range" type="range" id="rate_range" min="1" max="50" value="12" />
+                </div>
+                <div class="controller">
+                    <div class="controller-top-two">
+                        <div class="controller-lable">With compounding interval</div>
+                        <div class="controller-input">
+                            <button class="active">Monthly</button>
+                            <button class="unactive">Quarterly</button>
+                            <button class="unactive">Yearly</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="calc-ar-calculations">
+                <div class="calc-ar-calculations-left">
+                    <span>Invest for a period of</span>
+                    <div class="years">
+                        <input type="number" value="1" min="1" max="50" id="years_input" /> Years
+                    </div>
+                    <canvas id="barChart" height="200px"></canvas>
+                </div>
+                <div class="calc-ar-calculation-right">
+                    <div class="inflation">
+                        <span>Adjust for inflation:</span>
+                        <button class="inflation-btn active" data-rate="0">None</button>
+                        <button class="inflation-btn" data-rate="4">4%</button>
+                        <button class="inflation-btn" data-rate="6">6%</button>
+                        <button class="inflation-btn" data-rate="8">8%</button>
+                    </div>
+                    <div class="calculations-box">
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Total Invested</span>
+                            <b class="calculation-row-value" id="invested_calc">₹ 0</b>
+                        </div>
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Gains</span>
+                            <b class="calculation-row-value" id="gains_calc">₹ 0</b>
+                        </div>
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Future Value</span>
+                            <b class="calculation-row-value" id="future_calc">₹ 0</b>
+                        </div>
+                        <div class="calculation-row">
+                            <span class="calculation-row-label">Inflation-Adjusted Value</span>
+                            <b class="calculation-row-value" id="adjusted_future">₹ 0</b>
+                        </div>
+                    </div>
+                    <!-- <hr/>
+                    <div class="calculation-row-bottom">
+                        <div class="info">Did you know? Einstein called Compound interest - the 8th wonder of the world!</div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const investInput = document.getElementById('invest_input');
+        const investRange = document.getElementById('invest_range');
+        const returnsInput = document.getElementById('rate_input');
+        const returnsRange = document.getElementById('rate_range');
+        const yearInput = document.getElementById('years_input');
+        const msipBtn = document.getElementById('msip');
+        const lumpBtn = document.getElementById('lump');
+        const investedCalc = document.getElementById('invested_calc');
+        const gainsCalc = document.getElementById('gains_calc');
+        const futureCalc = document.getElementById('future_calc');
+        const adjustedFuture = document.getElementById('adjusted_future');
+        const compoundingButtons = document.querySelectorAll('.controller-input button');
+        const inflationButtons = document.querySelectorAll('.inflation-btn');
+        const ctx = document.getElementById('barChart').getContext('2d');
+
+        let op = 0;
+        let compoundingInterval = 12;
+        let inflationRate = 0;
+        let sipChart = null;
+
+        function formatRupee(value) {
+            if (value >= 1e7) return (value / 1e7).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " Cr";
+            if (value >= 1e5) return (value / 1e5).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " L";
+            if (value >= 1e3) return (value / 1e3).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " K";
+            return value.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function parseValue(str) {
+            str = str.toLowerCase().replace(/[^0-9.klcr]/g, '');
+            let num = parseFloat(str);
+            if (isNaN(num)) return 0;
+            if (str.includes('cr')) return num * 1e7;
+            if (str.includes('l')) return num * 1e5;
+            if (str.includes('k')) return num * 1e3;
+            console.log(num)
+            return num;
+        }
+
+        function updateSliderBackground(slider) {
+            const val = (slider.value - slider.min) / (slider.max - slider.min);
+            slider.style.background = `linear-gradient(to right, #F5C519 ${val * 100}%, #ddd ${val * 100}%)`;
+        }
+
+        function bindInputRange(textId, rangeId, isPercent = false) {
+            const input = document.getElementById(textId);
+            const range = document.getElementById(rangeId);
+
+            function updateFromRange() {
+                const val = parseFloat(range.value);
+                input.value = isPercent ? val + " %" : formatRupee(val);
+                updateSliderBackground(range);
+                updateChart();
+            }
+
+            function updateFromInput() {
+                let val = parseValue(input.value);
+                val = Math.min(Math.max(val, +range.min), +range.max);
+                range.value = val;
+                updateSliderBackground(range);
+                updateChart();
+            }
+
+            range.addEventListener('input', updateFromRange);
+            input.addEventListener('focus', () => input.value = parseValue(input.value));
+            input.addEventListener('blur', updateFromInput);
+            input.addEventListener('input', () => {
+                const val = parseFloat(input.value);
+                if (!isNaN(val)) updateFromInput();
+            });
+
+            updateFromRange();
+        }
+
+        function calculateCompound(investAmt, rate, years) {
+            const n = compoundingInterval;
+            const r = rate / 100;
+            let labels = [],
+                investedArr = [],
+                gainsArr = [];
+
+            if (op === 0) {
+                for (let y = 1; y <= years; y++) {
+                    const months = y * 12;
+                    const invested = investAmt * months;
+                    const monthlyRate = r / 12;
+                    const futureValue = investAmt * ((Math.pow(1 + monthlyRate, months) - 1) * (1 + monthlyRate)) / monthlyRate;
+                    labels.push(`${y}Y`);
+                    investedArr.push(Math.round(invested));
+                    gainsArr.push(Math.round(futureValue - invested));
+                }
+            } else {
+                for (let y = 1; y <= years; y++) {
+                    const invested = investAmt;
+                    const futureValue = invested * Math.pow(1 + r / n, n * y);
+                    labels.push(`${y}Y`);
+                    investedArr.push(Math.round(invested));
+                    gainsArr.push(Math.round(futureValue - invested));
+                }
+            }
+            return {
+                labels,
+                investedArr,
+                gainsArr
+            };
+        }
+
+        function drawChart(labels, investedArr, gainsArr) {
+            if (sipChart) sipChart.destroy();
+            sipChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Invested',
+                        data: investedArr,
+                        backgroundColor: '#ccc',
+                        stack: 'stack1'
+                    }, {
+                        label: 'Gains',
+                        data: gainsArr,
+                        backgroundColor: '#004080',
+                        stack: 'stack1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ₹${ctx.raw.toLocaleString()}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                callback: value => '₹' + formatRupee(value)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            const investVal = parseValue(investInput.value);
+            const rateVal = parseValue(returnsInput.value);
+            let yearsVal = parseInt(yearInput.value) || 1;
+            yearsVal = Math.max(1, Math.min(yearsVal, 50));
+            yearInput.value = yearsVal;
+
+            const {
+                labels,
+                investedArr,
+                gainsArr
+            } = calculateCompound(investVal, rateVal, yearsVal);
+            drawChart(labels, investedArr, gainsArr);
+
+            const totalInvested = investedArr[investedArr.length - 1];
+            const totalGains = gainsArr[gainsArr.length - 1];
+            const totalFuture = totalInvested + totalGains;
+            const adjusted = totalFuture / Math.pow(1 + inflationRate / 100, yearsVal);
+
+            investedCalc.textContent = "₹ " + formatRupee(totalInvested);
+            gainsCalc.textContent = "₹ " + formatRupee(totalGains);
+            futureCalc.textContent = "₹ " + formatRupee(totalFuture);
+            adjustedFuture.textContent = "₹ " + formatRupee(adjusted);
+        }
+
+        msipBtn.addEventListener('click', () => {
+            op = 0;
+            msipBtn.classList.add('s-button-active');
+            msipBtn.classList.remove('s-button');
+            lumpBtn.classList.remove('s-button-active');
+            lumpBtn.classList.add('s-button');
+            updateChart();
+        });
+
+        lumpBtn.addEventListener('click', () => {
+            op = 1;
+            lumpBtn.classList.add('s-button-active');
+            lumpBtn.classList.remove('s-button');
+            msipBtn.classList.remove('s-button-active');
+            msipBtn.classList.add('s-button');
+            updateChart();
+        });
+
+        compoundingButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                compoundingButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const text = btn.textContent.toLowerCase();
+                compoundingInterval = text === 'monthly' ? 12 : text === 'quarterly' ? 4 : 1;
+                updateChart();
+            });
+        });
+
+        inflationButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                inflationButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                inflationRate = parseFloat(btn.dataset.rate);
+                updateChart();
+            });
+        });
+
+        bindInputRange('invest_input', 'invest_range');
+        bindInputRange('rate_input', 'rate_range', true);
+        yearInput.addEventListener('input', updateChart);
+        [investRange, returnsRange].forEach(updateSliderBackground);
+        updateChart();
+    </script>
+</body>
+
+</html>

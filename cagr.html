@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAGR Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fafafa;
+        }
+        
+        .calc {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 15px;
+        }
+        
+        .head {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .calc-heading {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .calc-sub-heading {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .calc-ar {
+            background: #fffdf4;
+            border-radius: 10px;
+            padding: 30px;
+            outline: 1px solid #ccc;
+        }
+        
+        .calc-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .calc-ar-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .controller {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .controller-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .controller-input {
+            position: relative;
+            font-weight: 600;
+        }
+        
+        .controller-input .tip {
+            position: absolute;
+            top: 10px;
+        }
+        
+        .input-input {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+            padding-left: 10px;
+            font-size: 16px;
+            max-width: 120px;
+            background: transparent;
+        }
+        
+        .input-range {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            height: 4px;
+            background: linear-gradient(to right, #F5C519 0%, #ddd 0%);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 0px 2px #F5C519;
+            margin-top: -6px;
+        }
+        
+        .calc-ar-calculations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .calc-ar-calculations-left,
+        .calc-ar-calculation-right {
+            flex: 1;
+        }
+        
+        .calculations-box {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .calculation-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        
+        .calculation-row b {
+            font-weight: bold;
+        }
+        
+        .calculation-row-bottom {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .info {
+            font-size: 14px;
+            color: #444;
+            flex: 1;
+        }
+        
+        .invest-now {
+            background: #004080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        select {
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .calc-ar-controls,
+            .calc-ar-calculations {
+                flex-direction: column;
+            }
+            .controller,
+            .calc-ar-calculations-left,
+            .calc-ar-calculation-right {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calc">
+        <div class="head">
+            <div class="calc-heading">CAGR Calculator</div>
+            <div class="calc-sub-heading">
+                Use this calculator to estimate how your investment grows over time using the Compound Annual Growth Rate (CAGR) or Absolute Return.
+            </div>
+        </div>
+
+        <div class="calc-ar">
+            <div class="calc-title">Estimate Your Investment Growth</div>
+
+            <div class="calc-ar-controls">
+                <div class="controller">
+                    <div class="controller-top">
+                        <div>Initial Investment</div>
+                        <div class="controller-input">
+                            <span class="tip">₹</span>
+                            <input class="input-input" type="text" id="invest_input" value="1000" />
+                        </div>
+                    </div>
+                    <input class="input-range" id="invest_range" type="range" min="1000" max="100000000" value="1000" />
+                </div>
+
+                <div class="controller">
+                    <div class="controller-top">
+                        <div>Final Maturity Value</div>
+                        <div class="controller-input">
+                            <span class="tip">₹</span>
+                            <input class="input-input" type="text" id="returns_input" value="1000" />
+                        </div>
+                    </div>
+                    <input class="input-range" id="returns_range" type="range" min="1000" max="100000000" value="1000" />
+                </div>
+
+                <div class="controller">
+                    <div class="controller-top">
+                        <div>Investment Duration</div>
+                        <div class="controller-input">
+                            <input class="input-input" type="text" id="period_input" value="1 years" />
+                        </div>
+                    </div>
+                    <input class="input-range" id="period_range" type="range" min="1" max="50" value="1" />
+                </div>
+            </div>
+
+            <div class="calc-ar-calculations">
+                <div class="calc-ar-calculations-left">
+                    <p style="margin-bottom: 10px;">Growth Overview:</p>
+                    <canvas id="barChart" height="200"></canvas>
+                </div>
+
+                <div class="calc-ar-calculation-right">
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: 600;">Return Type:</label>
+                        <select id="returnType" onchange="updateCAGRChart()">
+              <option value="cagr">Annual Return (CAGR)</option>
+              <!-- <option value="absolute">Total Return (%)</option> -->
+            </select>
+                    </div>
+
+                    <div class="calculations-box">
+                        <div class="calculation-row">
+                            <span>Initial Investment</span>
+                            <b id="invested_calc">₹0</b>
+                        </div>
+                        <div class="calculation-row">
+                            <span>Total Gains</span>
+                            <b id="gains_calc">₹0</b>
+                        </div>
+                        <div class="calculation-row">
+                            <span>Return (%)</span>
+                            <b id="future_calc">0%</b>
+                        </div>
+                    </div>
+
+                    <!-- <div class="calculation-row-bottom">
+                        <div class="info">
+                            Make smart choices based on your long-term return expectations and stay invested!
+                        </div>
+                        <button class="invest-now">Invest Now</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatRupee(value) {
+            if (value >= 10000000) return (value / 10000000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " Cr";
+            if (value >= 100000) return (value / 100000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " L";
+            if (value >= 1000) return (value / 1000).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " K";
+            return value.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function drawCAGRBarChart(initial, final, years, returnType) {
+            const ctx = document.getElementById("barChart").getContext("2d");
+            if (window.sipChart) window.sipChart.destroy();
+
+            const labels = [],
+                investedArr = [],
+                gainsArr = [];
+
+            for (let i = 1; i <= years; i++) {
+                let invested = initial;
+                let value = returnType === "cagr" ?
+                    initial * Math.pow(final / initial, i / years) :
+                    initial + ((final - initial) / years) * i;
+                labels.push(i + "Y");
+                investedArr.push(Math.round(invested));
+                gainsArr.push(Math.round(value - invested));
+            }
+
+            window.sipChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Invested",
+                        data: investedArr,
+                        backgroundColor: "#ccc",
+                        stack: "stack1"
+                    }, {
+                        label: "Gains",
+                        data: gainsArr,
+                        backgroundColor: "#004080",
+                        stack: "stack1"
+                    }, ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ": ₹" + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                callback: value => "₹" + formatRupee(value)
+                            }
+                        },
+                        x: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCAGRChart() {
+            const initial = parseFloat(document.getElementById("invest_range").value);
+            const final = parseFloat(document.getElementById("returns_range").value);
+            const years = parseInt(document.getElementById("period_range").value);
+            const returnType = document.getElementById("returnType").value;
+
+            const gains = final - initial;
+            const percent = returnType === "cagr" ?
+                (Math.pow(final / initial, 1 / years) - 1) * 100 :
+                ((final - initial) / initial) * 100;
+
+            drawCAGRBarChart(initial, final, years, returnType);
+
+            document.getElementById("invested_calc").innerText = "₹" + formatRupee(initial);
+            document.getElementById("gains_calc").innerText = "₹" + formatRupee(gains);
+            document.getElementById("future_calc").innerText = percent.toFixed(2) + " %";
+        }
+
+        ["invest_range", "returns_range", "period_range"].forEach(id => {
+            document.getElementById(id).addEventListener("input", updateCAGRChart);
+        });
+
+        function formatValue(id, val) {
+            val = parseFloat(val);
+            if (["invest_range", "returns_range"].includes(id)) {
+                if (val >= 10000000) return (val / 10000000).toFixed(2) + " Cr";
+                if (val >= 100000) return (val / 100000).toFixed(2) + " L";
+                if (val >= 1000) return (val / 1000).toFixed(2) + " K";
+            } else if (id === "period_range") {
+                return val + " years";
+            }
+            return val.toString();
+        }
+
+        function updateSliderBackground(slider) {
+            const val = (slider.value - slider.min) / (slider.max - slider.min);
+            slider.style.background = `linear-gradient(to right, #F5C519 ${val * 100}%, #ddd ${val * 100}%)`;
+        }
+
+        document.querySelectorAll(".input-range").forEach(slider => {
+            const input = document.getElementById(slider.id.replace("_range", "_input"));
+            input.value = formatValue(slider.id, slider.value);
+            updateSliderBackground(slider);
+
+            slider.addEventListener("input", () => {
+                input.value = formatValue(slider.id, slider.value);
+                updateSliderBackground(slider);
+            });
+
+            input.addEventListener("focus", () => {
+                input.value = slider.value;
+            });
+
+            input.addEventListener("input", () => {
+                const parsed = parseFloat(input.value);
+                if (!isNaN(parsed)) {
+                    const clamped = Math.min(Math.max(parsed, slider.min), slider.max);
+                    slider.value = clamped;
+                    updateSliderBackground(slider);
+                }
+            });
+
+            input.addEventListener("blur", () => {
+                input.value = formatValue(slider.id, slider.value);
+            });
+        });
+
+        updateCAGRChart();
+    </script>
+</body>
+
+</html>
